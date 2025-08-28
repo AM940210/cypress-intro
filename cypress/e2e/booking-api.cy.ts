@@ -46,10 +46,23 @@ describe('Bokning API', () => {
             const booking = res.body.find((b) => b.name === "Testperson");
             expect(booking).to.exist;
 
-            cy.request("DELET", `/api/bookings/${booking._id}`).then((deleteRes) => {
+            cy.request("DELETE", `/api/bookings/${booking._id}`).then((deleteRes) => {
                 expect(deleteRes.status).to.eq(200);
                 expect(deleteRes.body).to.have.property("message");
             });
         });
-    })
+    });
+
+    it("should return a specific booking by ID", () => {
+        cy.request("GET", "/api/bookings").then((res) => {
+            const booking = res.body.find((b) => b.name === "Testperson");
+            expect(booking).to.exist;
+
+            cy.request("GET", `/api/bookings/${booking._id}`).then((singleRes) => {
+                expect(singleRes.status).to.eq(200);
+                expect(singleRes.body).to.have.property("name", "Testperson");
+                expect(singleRes.body).to.have.property("service");
+            });
+        });
+    });
 });
