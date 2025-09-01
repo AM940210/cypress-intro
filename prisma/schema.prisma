@@ -18,3 +18,11 @@ model Todo {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   text String
 }
+
+model Booking {
+  id    String    @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  date  DateTime
+  time  String
+  service String
+}
