@@ -1,12 +1,15 @@
 import { db } from "@/prisma/db";
-import TodoList from "./ui/todo-list";
+import BookingList from "./ui/booking-list";
 
 export default async function Home() {
-  const todos = await db.todo.findMany();
-
+  const bookings = await db.booking.findMany({
+    orderBy: { date: "asc" },
+  });
+  
   return (
     <main>
-      <TodoList defaultTodos={todos} />
+      <h1 className="text-2xl font-bold mb-4">Booking List</h1>
+      <BookingList defaultBookings={bookings}/>
     </main>
   );
 }
