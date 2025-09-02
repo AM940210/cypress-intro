@@ -17,8 +17,9 @@ export default function BookingList({ defaultBookings }: Props) {
         <ul className="space-y-2">
             {defaultBookings.map((booking) => (
                 <li key={booking.id} className="border p-4 rounded">
-                    <strong>{booking.name}</strong> booked a{""}
-                    <em>{booking.service}</em> on {booking.date.toLocaleDateString()} at {booking.time}
+                    <strong>{booking.name}</strong> booked a{" "}
+                    <em>{booking.service}</em> on{" "}
+                    {booking.date.toLocaleDateString()} at {booking.time}
                 </li>
             ))}
         </ul>
