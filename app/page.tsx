@@ -7,12 +7,11 @@ export default async function Home() {
   });
 
   return (
-    <main>
+    <main className="p-4">
       <h1 className="text-2xl font-bold mb-4">Booking List</h1>
       <BookingList 
         defaultBookings={bookings}
         onEdit={(b) => alert(`Edit ${b.name}`)}
-        onDelete={(id) => alert(`Delete booking ${id}`)}
       />
     </main>
   );
