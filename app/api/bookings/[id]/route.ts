@@ -1,19 +1,21 @@
-import { NextResponse } from "next/server";
 import { db } from "@/prisma/db";
+import { NextResponse } from "next/server";
 
-// DELETE booking
-export async function DELETE(
-    req: Request,
-    { params }: { params: { id: string } }
-) {
+type Params = {
+    params: { id: string }
+};
+
+export async function DELETE(req: Request, { params }: Params) {
     try {
+        const { id } = params;
+
         await db.booking.delete({
-            where: { id: params.id },
+            where: { id },
         });
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Delete failed:", error);
+        console.error("Error deleting booking:", error);
         return NextResponse.json({ success: false, error: "Failed to delete"}, { status: 500});
     }
 }
