@@ -17,16 +17,13 @@ type Props = {
 export default function BookingList({ defaultBookings }: Props) {
     
     const [bookings, setBookings] = useState(defaultBookings);
+    const [editing, setEditing] = useState<Booking | null>(null);
 
     const formatDateTime = (date: string, time: string) => {
         if (!date || !time) return "Invalid date";
 
         // Ensure valid ISO string
-        const [h, m] = time.split(":");
-        const hours = h?.padStart(2, "0") ?? "00";
-        const minutes = m?.padStart(2, "0") ?? "00";
-
-        const isoString = `${date}T${time}:${minutes}:00`;
+        const isoString = `${date}T${time}`;
         const parsed = new Date(isoString);
 
         if (isNaN(parsed.getTime())) return "Invalid date";
@@ -38,9 +35,26 @@ export default function BookingList({ defaultBookings }: Props) {
     };
 
     const handleEdit = (booking: Booking) => {
-        alert(`Edit ${booking.name}`);
-        // later: open a modal, or navigate to edit page
-    }
+        setEditing(booking);
+    };
+
+    const handleSave = async () => {
+        if (!editing) return;
+
+        // Optimistic UI update
+        setBookings((prev) => 
+            prev.map((b) => (b.id === editing.id ? editing : b))
+        );
+
+        // TODO: Call API here (PUT /api/booking/[ud])
+        // await fetch(`/api/bookings/${editing.id}`, {
+        // method: "PUT",
+        // headers: {"Content-Type": "application/json"},
+        // body: JSON.stringify(editing),
+        // });
+
+        setEditing(null); // close edit mode
+    };
 
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this booking?")) return;
@@ -64,22 +78,68 @@ export default function BookingList({ defaultBookings }: Props) {
         <ul className="space-y-2">
             {bookings.map((booking) => (
                 <li key={booking.id} className="border p-4 rounded">
-                        <strong>{booking.name}</strong> booked a{" "}
-                        <em>{booking.service}</em> on{" "} 
-                        {formatDateTime(booking.date, booking.time)}
+                    {editing?.id === booking.id ? (
+                        // Edit mode
+                        <div className="space-y-2">
+                            <input 
+                                type="text"
+                                value={editing.name}
+                                onChange={(e) => 
+                                    setEditing({ ...editing, name: e.target.value })
+                                }
+                                className="border px-2 py-1 rounded w-full"
+                            />
+                            <input 
+                                type="text"
+                                value={editing.time}
+                                onChange={(e) =>
+                                    setEditing({ ... editing, time: e.target.value })
+                                }
+                                className="border px-2 py-1 rounded w-full"
+                            />
+                            <input 
+                                type="text"
+                                value={editing.service}
+                                onChange={(e) => 
+                                    setEditing({ ...editing, service: e.target.value })
+                                }
+                            />
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={handleSave}
+                                    className="text-green-600 border border-green-600 px-3 py-1 rounded"
+                                >
+                                    Save
+                                </button>
+                                <button
+                                    onClick={() => setEditing(null)}
+                                    className="text-gray-600 border border-gray-600 px-3 py-1 rounded"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        // View mode
+                        <div>
+                            <strong>{booking.name}</strong> booked a{" "}
+                            <em>{booking.service}</em> on{" "} 
+                            {formatDateTime(booking.date, booking.time)}
 
-                        <button 
-                            onClick={() => handleEdit(booking)} 
-                            className="ml-4 rounded text-blue-500 border border-blue-500 px-2 py-1 hover:gb-blue-50"
-                        >
-                            Edit
-                        </button>
-                        <button 
-                            onClick={() => handleDelete(booking.id)} 
-                            className="ml-2 rounded text-red-500 border border-red-500 px-3 py-1 hover:gb-red-50"
-                        >
-                            Delete
-                        </button>
+                            <button 
+                                onClick={() => handleEdit(booking)} 
+                                className="ml-4 rounded text-blue-500 border border-blue-500 px-2 py-1 hover:gb-blue-50"
+                            >
+                                Edit
+                            </button>
+                            <button 
+                                onClick={() => handleDelete(booking.id)} 
+                                className="ml-2 rounded text-red-500 border border-red-500 px-3 py-1 hover:gb-red-50"
+                            >
+                                Delete
+                            </button> 
+                        </div>
+                    )}      
                 </li>
             ))}
         </ul>
