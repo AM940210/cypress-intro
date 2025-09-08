@@ -13,9 +13,14 @@ export async function DELETE(req: Request, { params }: Params) {
             where: { id },
         });
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({
+            success: true,
+            message: "Booking deleted successfully", 
+        });
     } catch (error) {
-        console.error("Error deleting booking:", error);
-        return NextResponse.json({ success: false, error: "Failed to delete"}, { status: 500});
+        return NextResponse.json(
+            { success: false, error: "Failed to delete"}, 
+            { status: 500}
+        );
     }
 }
