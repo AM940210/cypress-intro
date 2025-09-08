@@ -59,7 +59,7 @@ export async function PUT(req: Request, { params }: Params) {
         });
     } catch (error) {
         return NextResponse.json(
-            { succes: false, message: "Failed to update booking"},
+            { success: false, message: "Failed to update booking"},
             { status: 500 }
         );
     }

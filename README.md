@@ -1,3 +1,50 @@
+# Bokningsapplikation
+
+## Beskrivning
+Detta projekt är en fullstack webbapplikation för att hantera bokningar.
+Användaren kan lägga till, redigera och ta bort bokningar me information om namn, service, datum och tid.
+
+Applikationen är byggd med **Next.js**, **Tailwind CSS** och **Prisma** för databashantering.
+E2E-tester för användarflöden är implementerade me **Cypress**.
+
+---
+
+## Funktioner
+- Lista alla bokningar
+- Lägga till nya bokningar
+- Redigera befintliga bokningar
+- Ta bort bokningar
+- Fomaterad visning av datum och tid
+- Validering av obligatoriska fält
+- Automatiserade E2E-tester för alla huvudfunktioner
+
+---
+
+## Teknologier
+- **Frontend:** React, Next.js, Tailwind CSS
+- **Backend:** Next.js API routes
+- **Databas:** Prisma / MongoDB 
+
+---
+
+## Insallation och körning
+
+1. Klona projektet:
+```bash
+git clone <din-repo-url>
+cd <projekt-mapp>
+
+2. npm install
+
+3. npm run dev
+
+4. npm run test
+
+5. Öppna webbläsaren på:
+http://localhost:3000
+
+
+
 # NextJS + Cypress boilerplate
 
 ## Kom igång
