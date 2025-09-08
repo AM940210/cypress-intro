@@ -5,6 +5,32 @@ type Params = {
     params: { id: string }
 };
 
+
+// Get/api/bookings:id
+export async function GET(req: Request, { params }: Params) {
+    try {
+        const { id } = params;
+
+        const booking = await db.booking.findUnique({
+            where: { id },
+        });
+
+        if (!booking) {
+            return NextResponse.json(
+                { success: false, message: "Booking not found" },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json(booking); // return booking object
+    } catch (error) {
+        return NextResponse.json(
+            { success: false, message: "Failed to fetch booking"},
+            { status: 500 }
+        );
+    }
+}
+
 export async function DELETE(req: Request, { params }: Params) {
     try {
         const { id } = params;
