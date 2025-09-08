@@ -31,6 +31,40 @@ export async function GET(req: Request, { params }: Params) {
     }
 }
 
+// PUT/api/bookings/:id
+export async function PUT(req: Request, { params }: Params) {
+    try {
+        const { id } = params;
+        const body: {
+            name?: string;
+            date?: string;
+            time?: string;
+            service?: string;
+        } = await req.json();
+
+        const updateBooking = await db.booking.update({
+            where: { id },
+            data: {
+                name: body.name,
+                date: body.date,
+                time: body.time,
+                service: body.service,
+            }
+        });
+
+        return NextResponse.json({
+            success: true,
+            message: "Booking update successfully",
+            booking: updateBooking,
+        });
+    } catch (error) {
+        return NextResponse.json(
+            { succes: false, message: "Failed to update booking"},
+            { status: 500 }
+        );
+    }
+}
+
 export async function DELETE(req: Request, { params }: Params) {
     try {
         const { id } = params;
