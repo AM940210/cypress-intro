@@ -8,10 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "test": "cypress open",
+    "test:ci": "cypress run",
+    "test:e2e": "start-server-and-test 'npm run dev' http//localhost:3000 'npm run test:ci'",
     "generate": "prisma generate",
     "push": "prisma db push",
     "studio": "prisma studio",
-    "seed": "prisma db seed"
+    "seed": "prisma db seed",
+    "seed:local": "node prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^6.15.0",
@@ -32,6 +35,7 @@
     "prisma": "^6.15.0",
     "tailwindcss": "^4",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "start-server-and-test": "^2.0.0"
   }
 }

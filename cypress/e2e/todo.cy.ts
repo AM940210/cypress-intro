@@ -3,17 +3,24 @@ describe("todo", () => {
     cy.task("reseed");
   });
 
-  it("should display three todos by default", () => {
+  it("should display three bookings by default", () => {
     cy.visit("http://localhost:3000");
-    cy.get("li").should("have.length", 3);
-    cy.get("li").first().should("contain.text", "Feed the cat");
-    cy.get("li").last().contains("Walk all the cats");
+    cy.get("li.border.p-4.rounded").should("have.length", 3);
+
+    cy.get("li.border.p-4.rounded").first().within(() => {
+      cy.contains("Testperson");
+      cy.contains("Klippning");
+      // ensure the date is rendered and not the literal "Invalid date"
+      cy.contains(/invalid date/i).should("not.exist");
+    });
   });
 
-  it("should be able to delete a todo", () => {
+  it("should be able to delete a booking", () => {
     cy.visit("http://localhost:3000");
-    cy.contains("Feed the cat").parents("li").find("button").click();
-    cy.get("li").should("have.length", 2);
-    cy.contains("Feed the cat").should("not.exist");
+    cy.get("li.border.p-4.rounded").first().within(() => {
+      cy.contains("Delete").click();
+    });
+    cy.get("li.border.p-4.rounded").should("have.length", 2);
+    cy.contains("Testperson").should("not.exist");
   });
 });
