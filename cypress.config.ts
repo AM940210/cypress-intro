@@ -9,9 +9,14 @@ export default defineConfig({
       // implement node event listeners here
       on("task", {
         async reseed() {
-          await db.booking.deleteMany();
-          await reseedBookings();
-          return null;
+          try {
+            await db.booking.deleteMany();
+            await reseedBookings();
+            return null;
+          } catch (err) {
+            console.error("cypress task reseed failed:", err);
+            throw err;
+          }
         },
       });
     },

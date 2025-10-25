@@ -6,10 +6,10 @@ export default async function Home() {
     orderBy: { date: "asc" },
   });
 
-  // Convert Date => string, so it can be serialized and passed to client
+  // Convert Date => string (use ISO to reliably get YYYY-MM-DD)
   const safeBookings = bookings.map((b) => ({
     ...b,
-    date: b.date.toString().split("T")[0],
+    date: b.date instanceof Date ? b.date.toISOString().split("T")[0] : String(b.date),
   }));
 
   return (

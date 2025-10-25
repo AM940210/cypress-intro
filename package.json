@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "cypress open",
     "test:ci": "cypress run",
-    "test:e2e": "start-server-and-test 'npm run dev' http//localhost:3000 'npm run test:ci'",
+    "test:e2e": "start-server-and-test 'npm run dev' http://localhost:3000 'npm run test:ci'",
     "generate": "prisma generate",
     "push": "prisma db push",
     "studio": "prisma studio",
