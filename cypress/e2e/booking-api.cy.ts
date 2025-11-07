@@ -28,9 +28,9 @@ describe('Bokning API', () => {
             time: "11:00",
             service: "Klippning"
         }).then((res) => {
-            const booking = res.body as Booking;
+            const booking = res.body.booking as Booking;
 
-            expect(res.status).to.eq(201);
+            expect(res.status).to.eq(200);
             expect(booking).to.have.property("id");
             expect(booking.name).to.eq("Ahmad");
         });
@@ -49,7 +49,7 @@ describe('Bokning API', () => {
             failOnStatusCode: false,
         }).then((res) => {
             expect(res.status).to.eq(400);
-            expect(res.body).to.have.property("error");
+            expect(res.body).to.have.property("message", "Missing required fields");
         });
     });
 
@@ -61,7 +61,10 @@ describe('Bokning API', () => {
 
             cy.request("DELETE", `/api/bookings/${booking!.id}`).then((deleteRes) => {
                 expect(deleteRes.status).to.eq(200);
-                expect(deleteRes.body).to.have.property("message");
+                expect(deleteRes.body).to.have.property(
+                    "message",
+                    "Booking deleted successfully"
+                );
             });
         });
     });

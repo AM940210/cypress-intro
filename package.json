@@ -17,7 +17,7 @@
     "seed:local": "node prisma/seed.js"
   },
   "dependencies": {
-    "@prisma/client": "^6.15.0",
+    "@prisma/client": "^6.19.0",
     "dotenv": "^17.2.1",
     "next": "15.5.0",
     "react": "19.1.0",
@@ -32,10 +32,10 @@
     "cypress": "^15.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
-    "prisma": "^6.15.0",
+    "prisma": "^6.19.0",
+    "start-server-and-test": "^2.0.0",
     "tailwindcss": "^4",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "start-server-and-test": "^2.0.0"
+    "typescript": "^5.9.2"
   }
 }

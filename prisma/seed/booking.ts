@@ -1,7 +1,6 @@
-import { db } from "../db";
+import { db } from "../db"
 
 export async function reseedBookings() {
-    await db.booking.deleteMany();
 
     await db.booking.createMany({
         data: [

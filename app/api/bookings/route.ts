@@ -1,48 +1,18 @@
+import { db } from "../../../prisma/db"
 import { NextResponse } from "next/server";
-import { db } from "@/prisma/db";
 
+// GET /api/bookings Lista alla bokningar
 export async function GET() {
     try {
-        let bookings = await db.booking.findMany({
-            orderBy: { date: "asc"},
-        });
-
-        // Seed 3 default bookings if none exist
-        if (bookings.length === 0) {
-            bookings = await db.$transaction([
-                db.booking.create({
-                    data: {
-                        name: "Alice",
-                        service: "Haircut",
-                        date: new Date("2025-09-05"),
-                        time: "10:00",
-                    },
-                }),
-                db.booking.create({
-                    data: {
-                        name: "Ahmad",
-                        service: "Color",
-                        date: new Date("2025-09-06"),
-                        time: "14:00",
-                    },
-                }),
-                db.booking.create({
-                    data: {
-                        name: "Ali",
-                        service: "Haircut",
-                        date: new Date("2025-09-07"),
-                        time: "09:30",
-                    },
-                }),
-            ]);
-        }
-
-        return NextResponse.json(bookings);
+       const bookings = await db.booking.findMany({
+        orderBy: { date: "asc"},
+       });
+       return NextResponse.json(bookings);
     } catch (error) {
-        console.error(error);
+        console.error("Failed to fetch bookings:", error);
         return NextResponse.json(
-            { error: "Failed to fetch bookings"},
-            { status: 500 }
+            { success: false, message: "Failed to fetch bookings"},
+            { status: 500}
         );
     }
 }
@@ -50,25 +20,37 @@ export async function GET() {
 // Post a new booking
 export async function POST(req: Request) {
     try {
-        const body = await req.json();
-        const { name, service, date, time } = body;
+        const body: {
+            name: string;
+            phone: string;
+            date: string;
+            service: string;
+        } = await req.json();
 
-        if (!name || !service || !date || !time) {
-            return NextResponse.json({ error: "Missing fields"}, { status: 400 });
+        // Kontrollera obligatoriska fält
+        if (!body.name || !body.phone || !body.date || !body.service) {
+            return NextResponse.json(
+                { success: false, message: "Missing required fields"},
+                { status: 400 }
+            );
         }
 
-        const newBooking = await db.booking.create({
+        // Skapa bokning i databasen
+        const booking = await db.booking.create({
             data: {
-                name,
-                service,
-                date: new Date(date),
-                time,
+                name: body.name,
+                phone: body.phone,
+                date: new Date(body.date),
+                service: body.service,
             },
         });
 
-        return NextResponse.json(newBooking, { status: 201 });
+        return NextResponse.json({ success: true, booking });
     } catch (error) {
-        console.error("POST /api/bookings error:", error);
-        return NextResponse.json({ error: "Failed to create booking"}, { status: 500 });
+        console.error("Failed to create booking:", error);
+        return NextResponse.json(
+            { success: false, message: "Failed to create booking"},
+            { status: 500 }
+        );
     }
 }

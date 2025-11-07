@@ -1,4 +1,5 @@
-# Bokningsapplikation
+## Frisörbokning - Fullstack app
+byggd me Next.js Prisma och Cypress.
 
 ## Beskrivning
 Detta projekt är en fullstack webbapplikation för att hantera bokningar.
@@ -36,12 +37,16 @@ cd <projekt-mapp>
 
 2. npm install
 
+3. npx prisma migrate dev
+
 3. npm run dev
 
-4. npm run test
-
-5. Öppna webbläsaren på:
+4. Öppna webbläsaren på:
 http://localhost:3000
+
+
+## Kör testerna
+5. npm run test
 
 
 
