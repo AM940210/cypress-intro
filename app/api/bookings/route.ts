@@ -21,16 +21,25 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const body: {
-            name: string;
-            phone: string;
-            date: string;
-            service: string;
+            name?: string;
+            phone?: string;
+            date?: string;
+            time?: string;
+            service?: string;
         } = await req.json();
 
         // Kontrollera obligatoriska fält
-        if (!body.name || !body.phone || !body.date || !body.service) {
+        if (!body.name || !body.phone || !body.date || !body.time || !body.service) {
             return NextResponse.json(
                 { success: false, message: "Missing required fields"},
+                { status: 400 }
+            );
+        }
+
+        // Enkel formatkontroll för tid (HH:MM)
+        if (!/^\d{2}:\d{2}$/.test(body.time)) {
+            return NextResponse.json(
+                { success: false, message: "Invalid time format, expected HH:MM" },
                 { status: 400 }
             );
         }
@@ -41,6 +50,7 @@ export async function POST(req: Request) {
                 name: body.name,
                 phone: body.phone,
                 date: new Date(body.date),
+                time: body.time,
                 service: body.service,
             },
         });

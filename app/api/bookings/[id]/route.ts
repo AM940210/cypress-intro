@@ -9,7 +9,7 @@ type Params = {
 // Get/api/bookings:id
 export async function GET(req: Request, { params }: Params) {
     try {
-        const id = parseInt(params.id, 10) // om id är int i Prisma
+        const id = params.id; // id is a string (e.g. UUID) in Prisma
         const booking = await db.booking.findUnique({ where: { id } });
 
         if (!booking) return NextResponse.json({ success: false, message: "Booking not found"}, { status: 404 });
@@ -23,7 +23,7 @@ export async function GET(req: Request, { params }: Params) {
 // PUT/api/bookings/:id
 export async function PUT(req: Request, { params }: Params) {
     try {
-        const id = parseInt(params.id, 10);
+        const id = params.id;
         const body: { name?: string; date?: string; time?: string; service?: string } = await req.json();
 
         const updateData: any = {};
@@ -51,7 +51,7 @@ export async function PUT(req: Request, { params }: Params) {
 
 export async function DELETE(req: Request, { params }: Params) {
     try {
-       const id = parseInt(params.id, 10);
+       const id = params.id;
        await db.booking.delete({ where: { id } });
        return NextResponse.json({ success: true, message: "Booking deleted successfully"});
     } catch (error) {

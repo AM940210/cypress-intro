@@ -1,11 +1,15 @@
-import { PrismaClient } from "@prisma/client";
+import "dotenv/config";
+import { PrismaClient } from "../generated/prisma";
 
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+declare global {
+  // Prevent multiple PrismaClient instances during hot-reload in dev
+  var prisma: PrismaClient | undefined;
+}
 
 export const db =
-    globalForPrisma.prisma ||
-    new PrismaClient({
-        log: ["error", "warn"],
-    });
+  globalThis.prisma ??
+  new PrismaClient({
+    log: ["error", "warn"],
+  });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
