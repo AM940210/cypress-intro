@@ -24,7 +24,7 @@ describe('Bokning API', () => {
     it('should create a new booking', () => {
         cy.request("POST", "/api/bookings", {
             name: "Ahmad",
-            date: "2025-08-30",
+            date: "2025-08-30T00:00:00.000Z",
             time: "11:00",
             service: "Klippning"
         }).then((res) => {
