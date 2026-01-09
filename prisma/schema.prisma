@@ -6,10 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-<<<<<<< HEAD
-  output   = "../generated/prisma"
-=======
->>>>>>> a3a88cd (Remove unused todo tests and focus on booking E2E flow)
   binaryTargets = ["native", "windows"]
 }
 

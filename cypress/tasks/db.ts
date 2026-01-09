@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { reseedBookings } from "../../prisma/seed/booking";
 
