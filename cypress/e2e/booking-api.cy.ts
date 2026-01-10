@@ -28,9 +28,9 @@ describe('Bokning API', () => {
             time: "11:00",
             service: "Klippning"
         }).then((res) => {
-            const booking = res.body.booking as Booking;
+            expect(res.status).to.eq(201);
 
-            expect(res.status).to.eq(200);
+            const booking = res.body.booking as Booking;
             expect(booking).to.have.property("id");
             expect(booking.name).to.eq("Ahmad");
         });
