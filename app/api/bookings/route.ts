@@ -1,6 +1,25 @@
 import { NextResponse } from "next/server";
 import { db } from "@/prisma/db";
 
+// GET /api/bookings
+export async function GET() {
+  try {
+    const bookings = await db.booking.findMany({
+      orderBy: {
+        date: "asc",
+      },
+    });
+
+    return NextResponse.json(bookings, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch bookings" },
+      { status: 500 }
+    );
+  }
+}
+
+// POST /api/bookings
 export async function POST(req: Request) {
   try {
     const body = await req.json();
