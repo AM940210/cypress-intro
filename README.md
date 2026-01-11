@@ -1,30 +1,70 @@
-## Frisörbokning - Fullstack app
-byggd me Next.js Prisma och Cypress.
+## Frisörbokning - Fullstack webbapplikation med Cypress E2E
 
 ## Beskrivning
-Detta projekt är en fullstack webbapplikation för att hantera bokningar.
-Användaren kan lägga till, redigera och ta bort bokningar me information om namn, service, datum och tid.
+Detta projekt är en **fullstack webbapplikation för frisörbokning** där användaren kan:
+- se alla bokningar
+- skapa en ny bokning
+- hämta en specifik bokning via ID
+- ta bort en bokning
 
-Applikationen är byggd med **Next.js**, **Tailwind CSS** och **Prisma** för databashantering.
-E2E-tester för användarflöden är implementerade me **Cypress**.
+Applikationen är byggd med **Next.js (App Router)** och använder **Prisma + MongoDB** för datalagring.
+Alla huvudsakliga användarflöden testas med **automatiserade Cypress E2E-tester** som körs mot en **separat testdatabas**.
+
+Syftet med projektet är att visa hur man bygger och testar ett modernt fullstack-system med fokus på **End-To-End-testning**.
 
 ---
 
 ## Funktioner
+-skapa bokning (namn, tjänst, datum, tid)
 - Lista alla bokningar
+- Hämta bokning via ID
 - Lägga till nya bokningar
 - Redigera befintliga bokningar
 - Ta bort bokningar
 - Fomaterad visning av datum och tid
 - Validering av obligatoriska fält
-- Automatiserade E2E-tester för alla huvudfunktioner
+- Automatiserade E2E-tester med Cypress
+- Testdatabas som återstälss inför varje test
 
 ---
 
-## Teknologier
-- **Frontend:** React, Next.js, Tailwind CSS
-- **Backend:** Next.js API routes
-- **Databas:** Prisma / MongoDB 
+## Teknisk stack
+
+### Frontend
+- **Next.js (React, App Router)**
+- **TypeScript**
+- **Tailwind CSS**
+
+
+### Backend 
+- **Next.js API routes (REST)**
+- CRUD-endpoints enligt REST-principer
+
+
+### Databas 
+- **MongoDB Atlas**
+- **Prisma ORM**
+
+### Test
+- **Cypress E2E**
+- Cypress tasks för att reseeda testdatabasen
+
+
+### Versionshantering
+- **Git**
+- **GitHub**
+
+
+---
+
+## Användarflöden (E2E-testade)
+- Hämta alla bokningar
+- Skapa en ny bokning
+- Hämta bokning via ID
+- Ta bort bokning
+- Felhantering vid saknade fält
+
+Alla flöden verifieras automatiskt med Cypress.
 
 ---
 
@@ -32,10 +72,14 @@ E2E-tester för användarflöden är implementerade me **Cypress**.
 
 1. Klona projektet:
 ```bash
-git clone <din-repo-url>
-cd <projekt-mapp>
+git clone https://github.com/AM940210/cypress-intro.git
+cd cypress-intro
 
 2. npm install
+
+## Skapa .env-fil
+DATABASE_URL="mongodb+srv://<username>:<password>@cluster0.mongodb.net/mybokningssystem?retryWrites=true&w=majority"
+
 
 3. npx prisma migrate dev
 
