@@ -75,7 +75,7 @@ export default function BookingList({ defaultBookings }: Props) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center px-4">
-      <div className="w-full max-w-xl bg-white rounded-xl shadow-lg p-6">
+      <div className="w-full max-w-xl bg-white rounded-xl shadow-lg p-6 my-20">
 
         {/* Header */}
         <h1 className="text-2xl font-bold text-center">Boka tid hos frisör</h1>
