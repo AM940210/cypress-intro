@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Booking = {
   id: string;
@@ -17,6 +18,8 @@ type Props = {
 export default function BookingList({ defaultBookings }: Props) {
   const [bookings, setBookings] = useState(defaultBookings);
   const [editing, setEditing] = useState<Booking | null>(null);
+
+  const router = useRouter();
 
   const [newBooking, setNewBooking] = useState<Booking>({
     id: "",
@@ -61,17 +64,48 @@ export default function BookingList({ defaultBookings }: Props) {
   };
 
   const handleAddBooking = async () => {
-    if (!newBooking.name || !newBooking.date || !newBooking.time || !newBooking.service) {
-      alert("Fyll i alla fält.");
-      return;
+  if (
+    !newBooking.name ||
+    !newBooking.date ||
+    !newBooking.time ||
+    !newBooking.service
+  ) {
+    alert("Fyll i alla fält.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newBooking),
+    });
+
+    if (!res.ok) {
+      throw new Error("Kunde inte skapa bokning");
     }
 
-    const bookingWithId = { ...newBooking, id: crypto.randomUUID() };
+    // ⬅️ VIKTIGT: ta emot bokningen från backend
+    const data = await res.json();
+    const createdBooking = data.booking;
 
-    setBookings((prev) => [...prev, bookingWithId]);
+    // ✅ Uppdatera UI DIREKT
+    setBookings((prev) => [...prev, createdBooking]);
 
-    setNewBooking({ id: "", name: "", date: "", time: "", service: "" });
-  };
+    // Nollställ formulär
+    setNewBooking({
+      id: "",
+      name: "",
+      date: "",
+      time: "",
+      service: "",
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Ett fel inträffade");
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center px-4">
@@ -146,6 +180,7 @@ export default function BookingList({ defaultBookings }: Props) {
             {bookings.map((booking) => (
               <li
                 key={booking.id}
+                data-cy="booking-item"
                 className="border rounded-lg p-4 bg-gray-50 shadow-sm"
               >
                 {editing?.id === booking.id ? (
@@ -198,10 +233,15 @@ export default function BookingList({ defaultBookings }: Props) {
                 ) : (
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">
-                        {booking.name} – {booking.service}
+                      <p data-cy="booking-name" className="font-medium">
+                        {booking.name}
                       </p>
-                      <p className="text-sm text-gray-500">
+
+                      <p data-cy="booking-service" className="text-sm text-gray-500">
+                        {booking.service}
+                      </p>
+
+                      <p className="text-xs text-gray-400">
                         {formatDateTime(booking.date, booking.time)}
                       </p>
                     </div>

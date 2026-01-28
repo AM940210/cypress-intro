@@ -25,6 +25,13 @@ export async function reseedBookings() {
                 service: "Rakning",
                 phone: "070-3334444",
             },
+            {
+                name: "Ahmad",
+                date: new Date("2026-01-27T13:00:00Z"),
+                time: "13:00",
+                service: "Klippning",
+                phone: "070-4445555",   
+            }
         ],
     });
 };

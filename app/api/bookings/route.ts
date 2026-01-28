@@ -10,7 +10,12 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(bookings, { status: 200 });
+    return NextResponse.json(bookings, { 
+      status: 200,
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    });
   } catch (error) {
     return NextResponse.json(
       { success: false, message: "Failed to fetch bookings" },
