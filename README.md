@@ -1,7 +1,8 @@
 ## Frisörbokning - Fullstack webbapplikation med Cypress E2E
 
 ## Beskrivning
-Detta projekt är en **fullstack webbapplikation för frisörbokning** där användaren kan:
+Detta projekt är en **fullstack webbapplikation för frisörbokning** 
+där användaren kan:
 - se alla bokningar
 - skapa en ny bokning
 - hämta en specifik bokning via ID
@@ -18,7 +19,6 @@ Syftet med projektet är att visa hur man bygger och testar ett modernt fullstac
 -skapa bokning (namn, tjänst, datum, tid)
 - Lista alla bokningar
 - Hämta bokning via ID
-- Lägga till nya bokningar
 - Redigera befintliga bokningar
 - Ta bort bokningar
 - Fomaterad visning av datum och tid
@@ -59,9 +59,9 @@ Syftet med projektet är att visa hur man bygger och testar ett modernt fullstac
 
 ## Användarflöden (E2E-testade)
 - Hämta alla bokningar
-- Skapa en ny bokning
+- Skapa en ny bokning via UI
 - Hämta bokning via ID
-- Ta bort bokning
+- Ta bort bokning via UI
 - Felhantering vid saknade fält
 
 Alla flöden verifieras automatiskt med Cypress.
@@ -75,14 +75,16 @@ Alla flöden verifieras automatiskt med Cypress.
 git clone https://github.com/AM940210/cypress-intro.git
 cd cypress-intro
 
+# Installera dependencies
 2. npm install
 
-## Skapa .env-fil
+# Skapa .env-fil
 DATABASE_URL="mongodb+srv://<username>:<password>@cluster0.mongodb.net/mybokningssystem?retryWrites=true&w=majority"
 
-
+# Synka databasen
 3. npx prisma migrate dev
 
+# Starta utvecklingsservern
 3. npm run dev
 
 4. Öppna webbläsaren på:
