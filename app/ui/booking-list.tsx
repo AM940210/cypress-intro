@@ -49,7 +49,11 @@ export default function BookingList({ defaultBookings }: Props) {
     if (!editing) return;
 
     setBookings((prev) =>
-      prev.map((b) => (b.id === editing.id ? editing : b))
+      prev.map((b) => 
+        String(b.id) === String(editing.id)
+          ? {...b, ...editing }
+          : b
+      )
     );
 
     setEditing(null);
@@ -180,6 +184,7 @@ const handleAddBooking = async () => {
                   <div className="space-y-2">
                     <input
                       type="text"
+                      data-cy="edit-name-input"
                       value={editing.name}
                       onChange={(e) =>
                         setEditing({ ...editing, name: e.target.value })
@@ -210,6 +215,7 @@ const handleAddBooking = async () => {
 
                     <div className="flex gap-2">
                       <button
+                        data-cy="save-booking"
                         onClick={handleSave}
                         className="flex-1 bg-green-600 text-white py-1 rounded-lg"
                       >

@@ -58,19 +58,19 @@ describe("Frisörbokning – UI användarflöden", () => {
   it("should update a booking", () => {
     cy.contains('[data-cy="booking-name"]', "Testperson")
       .closest('[data-cy="booking-item"]')
-      .within(() => {
+      .contains("Ändra")
+      .click()
 
-        cy.contains("Ändra").click();
+    cy.get('[data-cy="edit-name-input"]')
+      .should("be.visible")
+      .clear()
+      .type("Uppdaterad")
 
-        cy.get('input[type="text"]')
-          .clear()
-          .type("Uppdaterad");
-
-        cy.contains("Spara").click();
-      });
+    cy.get('[data-cy="save-booking"]')
+      .click()
 
     cy.contains('[data-cy="booking-name"]', "Uppdaterad")
-      .should("exist");
+      .should("be.visible");
   });
 
   // Felhantering
