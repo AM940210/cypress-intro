@@ -18,19 +18,25 @@ describe("Frisörbokning – UI användarflöden", () => {
     cy.get("select").select("Klippning");
     cy.get('input[type="date"]').type("2026-02-24");
     cy.get('input[type="time"]').type("11:00");
-    cy.contains("Boka tid").click();
 
-    cy.contains("Ahmad").should("exist");
+    cy.get('[data-cy="submit-booking"]').click();
+
+    cy.contains('[data-cy="booking-name"]', "Ahmad")
+      .should("exist");
 
     // Andra bokningen
     cy.get('input[placeholder="Namn"]').type("Sara");
     cy.get("select").select("Färgning");
     cy.get('input[type="date"]').type("2026-02-25");
-    cy.get('input[time]').type("13:00");
-    cy.contains("Boka tid").click();
+    cy.get('input[type="time"]').type("13:00");
 
-    cy.contains("Sara").should("exist");
-    cy.contains("Ahmad").should("exist");
+    cy.get('[data-cy="submit-booking"]').click();
+
+    cy.contains('[data-cy="booking-name"]', "Sara")
+      .should("exist");
+
+    cy.contains('[data-cy="booking-name"]', "Ahmad")
+      .should("exist");
   });
 
   // Ta bort rätt bokning
@@ -50,22 +56,26 @@ describe("Frisörbokning – UI användarflöden", () => {
 
   // Uppdatera en bokning
   it("should update a booking", () => {
-    cy.contains("Testperson")
-      .closest("li")
+    cy.contains('[data-cy="booking-name"]', "Testperson")
+      .closest('[data-cy="booking-item"]')
       .within(() => {
+
         cy.contains("Ändra").click();
+
+        cy.get('input[type="text"]')
+          .clear()
+          .type("Uppdaterad");
+
+        cy.contains("Spara").click();
       });
 
-    cy.get('input[type="text"]').clear().type("Uppdaterad");
-
-    cy.contains("Spara").click();
-
-    cy.contains("Uppdaterad").should("exist");
+    cy.contains('[data-cy="booking-name"]', "Uppdaterad")
+      .should("exist");
   });
 
   // Felhantering
   it("should show validation error when field are empty", () => {
-    cy.contains("Boka tid").click();
+    cy.get('[data-cy="submit-booking"]').click();
     cy.contains("Fyll i alla fält").should("exist");
   });
 });

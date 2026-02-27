@@ -28,6 +28,8 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    console.log("POST BODY:", body);
+    
     const { name, date, time, service } = body;
 
     if (!name || !date || !time || !service) {

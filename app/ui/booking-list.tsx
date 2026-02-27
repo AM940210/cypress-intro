@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 type Booking = {
   id: string;
@@ -19,7 +18,6 @@ export default function BookingList({ defaultBookings }: Props) {
   const [bookings, setBookings] = useState(defaultBookings);
   const [editing, setEditing] = useState<Booking | null>(null);
 
-  const router = useRouter();
 
   const [newBooking, setNewBooking] = useState<Booking>({
     id: "",
@@ -63,13 +61,8 @@ export default function BookingList({ defaultBookings }: Props) {
     setBookings((prev) => prev.filter((b) => b.id !== id));
   };
 
-  const handleAddBooking = async () => {
-  if (
-    !newBooking.name ||
-    !newBooking.date ||
-    !newBooking.time ||
-    !newBooking.service
-  ) {
+const handleAddBooking = async () => {
+  if (!newBooking.name || !newBooking.date || !newBooking.time || !newBooking.service) {
     alert("Fyll i alla fält.");
     return;
   }
@@ -85,14 +78,11 @@ export default function BookingList({ defaultBookings }: Props) {
       throw new Error("Kunde inte skapa bokning");
     }
 
-    // ⬅️ VIKTIGT: ta emot bokningen från backend
     const data = await res.json();
-    const createdBooking = data.booking;
 
-    // ✅ Uppdatera UI DIREKT
-    setBookings((prev) => [...prev, createdBooking]);
+    // 🔥 Direkt uppdatering (INGEN extra fetch)
+    setBookings((prev) => [...prev, data.booking]);
 
-    // Nollställ formulär
     setNewBooking({
       id: "",
       name: "",
@@ -100,8 +90,9 @@ export default function BookingList({ defaultBookings }: Props) {
       time: "",
       service: "",
     });
-  } catch (err) {
-    console.error(err);
+
+  } catch (error) {
+    console.error(error);
     alert("Ett fel inträffade");
   }
 };
@@ -165,6 +156,8 @@ export default function BookingList({ defaultBookings }: Props) {
           </div>
 
           <button
+            type="button"
+            data-cy="submit-booking"
             onClick={handleAddBooking}
             className="mt-4 w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
           >
