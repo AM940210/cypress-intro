@@ -1,3 +1,5 @@
+import { text } from "stream/consumers";
+
 describe("Frisörbokning – UI användarflöden", () => {
   beforeEach(() => {
     cy.task("reseed");
@@ -75,7 +77,11 @@ describe("Frisörbokning – UI användarflöden", () => {
 
   // Felhantering
   it("should show validation error when field are empty", () => {
+
+    cy.on("window:alert", (text) => {
+      expect(text).to.equal("Fyll i alla fält.")
+    })
+
     cy.get('[data-cy="submit-booking"]').click();
-    cy.contains("Fyll i alla fält").should("exist");
   });
 });
