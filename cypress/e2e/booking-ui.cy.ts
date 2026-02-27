@@ -77,11 +77,10 @@ describe("Frisörbokning – UI användarflöden", () => {
 
   // Felhantering
   it("should show validation error when field are empty", () => {
-
-    cy.on("window:alert", (text) => {
-      expect(text).to.equal("Fyll i alla fält.")
-    })
-
     cy.get('[data-cy="submit-booking"]').click();
+
+    cy.get('[data-cy="error-message"]')
+      .should("be.visible")
+      .and("contain", "Fyll i alla fält")
   });
 });

@@ -17,6 +17,7 @@ type Props = {
 export default function BookingList({ defaultBookings }: Props) {
   const [bookings, setBookings] = useState(defaultBookings);
   const [editing, setEditing] = useState<Booking | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
 
   const [newBooking, setNewBooking] = useState<Booking>({
@@ -67,9 +68,11 @@ export default function BookingList({ defaultBookings }: Props) {
 
 const handleAddBooking = async () => {
   if (!newBooking.name || !newBooking.date || !newBooking.time || !newBooking.service) {
-    alert("Fyll i alla fält.");
+    setError("Fyll i alla fält.");
     return;
   }
+
+  setError(null);
 
   try {
     const res = await fetch("/api/bookings", {
@@ -158,6 +161,12 @@ const handleAddBooking = async () => {
               className="border px-3 py-2 rounded-lg"
             />
           </div>
+
+          {error && (
+            <p data-cy="error-message" className="text-red-600 text-sm mt-2">
+              {error}
+            </p>
+          )}
 
           <button
             type="button"
