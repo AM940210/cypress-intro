@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { db } from "@/prisma/db";
+import { db } from "@/lib/db";
 
-// GET /api/bookings
+// GET ALL BOOKINGS
 export async function GET() {
   try {
     const bookings = await db.booking.findMany({
@@ -16,42 +16,44 @@ export async function GET() {
         "Cache-Control": "no-store",
       },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      { success: false, message: "Failed to fetch bookings" },
+      { message: "Failed to fetch bookings" },
       { status: 500 }
     );
   }
 }
 
-// POST /api/bookings
+// CREATE BOOKING
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    console.log("POST BODY:", body);
-    
+    const body = await req.json();    
     const { name, date, time, service } = body;
 
     if (!name || !date || !time || !service) {
       return NextResponse.json(
-        { success: false, message: "Missing required fields" },
+        { message: "Missing required fields" },
         { status: 400 }
       );
     }
 
+    const bookingDate = new Date(`${date}T${time}:00`);
+
     const booking = await db.booking.create({
       data: {
         name,
-        time,
         service,
-        date: new Date(date),
+        date: bookingDate,
       },
     });
 
-    return NextResponse.json({ success: true, booking }, { status: 201 });
-  } catch (error) {
     return NextResponse.json(
-      { success: false, message: "Server error" },
+      { message: "Booking created", booking }, 
+      { status: 201 }
+    );
+  } catch {
+    return NextResponse.json(
+      { message: "Server error" },
       { status: 500 }
     );
   }

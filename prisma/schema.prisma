@@ -25,5 +25,5 @@ model Booking {
   date  DateTime
   time  String
   service String
-  phone String?
+  createdAt DateTime @default(now())
 }

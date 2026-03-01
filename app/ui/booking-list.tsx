@@ -43,27 +43,61 @@ export default function BookingList({ defaultBookings }: Props) {
   };
 
   const handleEdit = (booking: Booking) => {
-    setEditing(booking);
+    setEditing({
+      ...booking,
+      name: booking.name ?? "",
+      service: booking.service ?? "",
+      time: booking.time ?? "",
+      date: booking.date ?? "",
+    });
   };
 
   const handleSave = async () => {
     if (!editing) return;
 
-    setBookings((prev) =>
-      prev.map((b) => 
-        String(b.id) === String(editing.id)
-          ? {...b, ...editing }
-          : b
-      )
-    );
+    try {
+      const res = await fetch(`/api/bookings/${editing.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editing),
+      });
 
-    setEditing(null);
+      if (!res.ok) {
+        throw new Error("Kunde inte uppdatera bokning");
+      }
+
+      const data = await res.json();
+
+      setBookings((prev) =>
+      prev.map((b) => 
+        b.id === editing.id ? data.booking : b
+        )
+      );
+
+      setEditing(null);
+    } catch (error) {
+      console.error(error);
+      alert("Ett fel inträffade vid uppdatering");
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Är du säker på att du vill ta bort bokningen?")) return;
 
-    setBookings((prev) => prev.filter((b) => b.id !== id));
+    try {
+      const res = await fetch(`/api/bookings/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Kunde inte ta bort bokning");
+      }
+
+      setBookings((prev) => prev.filter((b) => b.id !== id));
+    } catch (error) {
+      console.error(error);
+      alert("Ett fel inträffade vid borttagning");
+    }
   };
 
 const handleAddBooking = async () => {
@@ -194,17 +228,17 @@ const handleAddBooking = async () => {
                     <input
                       type="text"
                       data-cy="edit-name-input"
-                      value={editing.name}
+                      value={editing?.name ?? ""}
                       onChange={(e) =>
-                        setEditing({ ...editing, name: e.target.value })
+                        setEditing(editing ? { ...editing, name: e.target.value } : null)
                       }
                       className="border px-3 py-2 rounded-lg w-full"
                     />
 
                     <select
-                      value={editing.service}
+                      value={editing?.service ?? ""}
                       onChange={(e) =>
-                        setEditing({ ...editing, service: e.target.value })
+                        setEditing(editing ? { ...editing, service: e.target.value } : null)
                       }
                       className="border px-3 py-2 rounded-lg w-full"
                     >
@@ -215,9 +249,9 @@ const handleAddBooking = async () => {
 
                     <input
                       type="time"
-                      value={editing.time}
+                      value={editing?.time ?? ""}
                       onChange={(e) =>
-                        setEditing({ ...editing, time: e.target.value })
+                        setEditing(editing ? { ...editing, time: e.target.value } : null)
                       }
                       className="border px-3 py-2 rounded-lg w-full"
                     />
