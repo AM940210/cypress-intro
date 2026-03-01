@@ -28,11 +28,10 @@ export default function BookingList({ defaultBookings }: Props) {
     service: "",
   });
 
-  const formatDateTime = (date: string, time: string) => {
-    if (!date || !time) return "Invalid date";
+  const formatDateTime = (date: string) => {
+    if (!date) return "Invalid date";
 
-    const timeWithSeconds = time.length === 5 ? `${time}:00` : time;
-    const parsed = new Date(`${date}T${timeWithSeconds}`);
+    const parsed = new Date(date);
 
     if (isNaN(parsed.getTime())) return "Invalid date";
 
