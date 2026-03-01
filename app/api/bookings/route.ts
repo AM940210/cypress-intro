@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { error } from "console";
 
 // GET ALL BOOKINGS
 export async function GET() {
@@ -37,13 +38,21 @@ export async function POST(req: Request) {
       );
     }
 
-    const bookingDate = new Date(`${date}T${time}:00`);
+    // Hantera båda UI-format och ISO-format 
+    let bookingDate: Date;
+
+    if (date.includes("T")) {
+      bookingDate = new Date(date);
+    } else {
+      bookingDate = new Date(`${date}T${time}:00`);
+    }
 
     const booking = await db.booking.create({
       data: {
         name,
         service,
         date: bookingDate,
+        time: time.toString(),
       },
     });
 
@@ -51,7 +60,8 @@ export async function POST(req: Request) {
       { message: "Booking created", booking }, 
       { status: 201 }
     );
-  } catch {
+  } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: "Server error" },
       { status: 500 }
