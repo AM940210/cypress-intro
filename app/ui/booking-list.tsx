@@ -28,18 +28,19 @@ export default function BookingList({ defaultBookings }: Props) {
     service: "",
   });
 
-  const formatDateTime = (date: string) => {
-    if (!date) return "Invalid date";
+  const formatDateTime = (date: string, time: string) => {
+  if (!date || !time) return "Invalid date";
 
-    const parsed = new Date(date);
+  const parsed = new Date(date);
 
-    if (isNaN(parsed.getTime())) return "Invalid date";
+  if (isNaN(parsed.getTime())) return "Invalid date";
 
-    return new Intl.DateTimeFormat("sv-SE", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(parsed);
-  };
+  const formattedDate = new Intl.DateTimeFormat("sv-SE", {
+    dateStyle: "medium",
+  }).format(parsed);
+
+  return `${formattedDate} kl ${time}`;
+};
 
   const handleEdit = (booking: Booking) => {
     setEditing({

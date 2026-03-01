@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/prisma/db";
+import { db } from "@/lib/db";
 
 type Params = {
   params: { id: string };
@@ -29,8 +29,12 @@ export async function GET(req: Request, { params }: Params) {
 }
 
 // PUT update booking
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await context.params;
     const body = await req.json();
     const { name, date, time, service } = body;
 
@@ -42,7 +46,7 @@ export async function PUT(req: Request, { params }: Params) {
     }
 
     const updatedBooking = await db.booking.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         name,
         date: new Date(date),
@@ -52,10 +56,12 @@ export async function PUT(req: Request, { params }: Params) {
     });
 
     return NextResponse.json(
-      { message: "Booking updated", booking: updatedBooking },
+      { booking: updatedBooking },
       { status: 200 }
     );
+
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: "Server error" },
       { status: 500 }
@@ -64,17 +70,24 @@ export async function PUT(req: Request, { params }: Params) {
 }
 
 // DELETE booking
-export async function DELETE(req: Request, { params }: Params) {
+export async function DELETE(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await context.params;
+
     await db.booking.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json(
       { message: "Booking deleted successfully" },
       { status: 200 }
     );
+
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: "Server error" },
       { status: 500 }
